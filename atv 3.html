@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="utf-8">
+
+            <title>É Um Palindromo</title>
+
+        </head>
+
+        <body>
+            <meta charset="utf-8">
+
+            <script>
+
+                //alert('ola');
+                
+                var form = document.getElementById('formulario');
+                var PL = document.getElementById('PL');
+                
+                function palindrome(str) {
+                    var re = /[\W_]/g;
+                    var lowRegStr = str.toLowerCase().replace(re, '');
+                    var reverseStr = lowRegStr.split('').reverse().join(''); 
+                    return reverseStr === lowRegStr;
+                }
+
+                function exibir() {
+                    let dado = palindrome();
+                    if (dado !== true ){alert('Não é Palindromo')}else{alert('é Palindromo')}
+                }
+               
+            </script>
+    
+            <form id="formulario">
+
+                <input type="text" id="PL" name="PL">
+                <input type="submit" value="enviar" onclick="exibir(palindrome('ana'))" >
+
+            </form>
+            
+        </body>		
+        
+    </html>
