@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Array Dinâmico</title>
+  </head>
+  <body>
+    <h1>Array Dinâmico</h1>
+
+    <form onsubmit="adicionarValor(); return false;">
+      <p>Adicione um valor ao array:</p>
+      <input type="text" id="textInput">
+      <button type="submit">Adicionar</button>
+    </form>
+
+    <ol id="lista"></ol>
+
+    <script>
+      let array = [];
+
+      function adicionarValor() {
+        let novoValor = document.getElementById("textInput").value;
+        array.push(novoValor);
+        array.sort();
+
+        let lista = document.getElementById("lista");
+        lista.innerHTML = "";
+
+        for (let i = 0; i < array.length; i++) {
+          let li = document.createElement("li");
+          li.appendChild(document.createTextNode(array[i]));
+          lista.appendChild(li);
+        }
+
+        document.getElementById("textInput").value = "";
+      }
+    </script>
+  </body>
+</html>

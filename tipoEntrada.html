@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Verificar Tipo de Dado</title>
+  </head>
+  <body>
+    <script>
+      let dado = prompt("Digite um dado:");
+      let verificarTipo = confirm("Deseja verificar o tipo do dado?");
+      
+      if (verificarTipo) {
+        let tipoDado = typeof dado;
+        document.write("O tipo do dado informado é: " + tipoDado);
+      } else {
+        document.write("Obrigado por visitar esta página.");
+      }
+    </script>
+  </body>
+</html>

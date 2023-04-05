@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>TODO list</title>
+	<!-- Adicionando Bootstrap -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<!-- Adicionando CSS personalizado -->
+	<style>
+		.container {
+			margin-top: 50px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-6 offset-md-3">
+				<h1>TODO list</h1>
+				<form>
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" id="new-task" placeholder="Adicionar nova tarefa">
+						<div class="input-group-append">
+							<button class="btn btn-outline-secondary" type="button" onclick="addTask()">Adicionar</button>
+						</div>
+					</div>
+				</form>
+				<ul id="task-list" class="list-group">
+				</ul>
+				<button class="btn btn-outline-secondary mt-3" type="button" onclick="sortList()">Ordenar</button>
+			</div>
+		</div>
+	</div>
+	<!-- Adicionando JavaScript -->
+	<script>
+		// Array para armazenar as tarefas
+		var taskList = [];
+
+		// Função para adicionar uma nova tarefa na lista
+		function addTask() {
+			var newTask = document.getElementById("new-task").value;
+			if (newTask.trim() != "") {
+				taskList.push(newTask);
+				updateList();
+				document.getElementById("new-task").value = "";
+			}
+		}
+
+		// Função para excluir uma tarefa da lista
+		function removeTask(index) {
+			taskList.splice(index, 1);
+			updateList();
+		}
+
+		// Função para atualizar a lista de tarefas
+		function updateList() {
+			var list = document.getElementById("task-list");
+			list.innerHTML = "";
+			for (var i = 0; i < taskList.length; i++) {
+				var item = document.createElement("li");
+				item.className = "list-group-item";
+				item.innerHTML = taskList[i];
+				var removeBtn = document.createElement("button");
+				removeBtn.className = "btn btn-outline-danger btn-sm float-right";
+				removeBtn.type = "button";
+				removeBtn.innerHTML = "Excluir";
+				removeBtn.setAttribute("onclick", "removeTask(" + i + ")");
+				item.appendChild(removeBtn);
+				list.appendChild(item);
+			}
+		}
+
+		// Função para reordenar a lista de tarefas
+		function sortList() {
+			taskList.sort();
+			updateList();
+		}
+	</script>
+	<!-- Adicionando scripts do Bootstrap -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJw

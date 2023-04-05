@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Formulário de Carros</title>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<h1>Formulário de Carros</h1>
+	<!-- formulário de cadastro de carro -->
+<form>
+	<label>Marca: <input type="text" id="marca"></label><br>
+	<label>Modelo: <input type="text" id="modelo"></label><br>
+	<label>Ano: <input type="number" id="ano"></label><br>
+	<label>Cor: <input type="text" id="cor"></label><br>
+	<label>Kilometragem: <input type="number" id="km"></label><br>
+	<label>Valor Fipe: <input type="number" id="valorFipe"></label><br>
+	<button type="button" onclick="adicionarCarro()">Adicionar Carro</button>
+  </form>
+  
+  <!-- lista de carros cadastrados -->
+  <h2>Carros Cadastrados:</h2>
+  <ul id="listaCarros"></ul>
+  
+  <script>
+	const listaCarros = [];
+  
+	function Carro(marca, modelo, ano, cor, km, valorFipe) {
+	  this.marca = marca;
+	  this.modelo = modelo;
+	  this.ano = ano;
+	  this.cor = cor;
+	  this.km = km;
+	  this.valorFipe = valorFipe;
+	  this.anosUtilizacao = function() {
+		const anos = new Date().getFullYear() - this.ano;
+		return anos;
+	  };
+	  this.valorMercado = function() {
+		let valorMercado = 0;
+		const anos = this.anosUtilizacao();
+		if (this.km <= 30000) {
+		  valorMercado = this.valorFipe * 1.1;
+		} else if (this.km > 30000 && this.km <= 50000) {
+		  valorMercado = this.valorFipe;
+		} else {
+		  valorMercado = this.valorFipe * 0.9;
+		}
+		return valorMercado;
+	  };
+	}
+  
+	function adicionarCarro() {
+	  const marca = document.getElementById("marca").value;
+	  const modelo = document.getElementById("modelo").value;
+	  const ano = document.getElementById("ano").value;
+	  const cor = document.getElementById("cor").value;
+	  const km = document.getElementById("km").value;
+	  const valorFipe = document.getElementById("valorFipe").value;
+  
+	  const novoCarro = new Carro(marca, modelo, ano, cor, km, valorFipe);
+	  listaCarros.push(novoCarro);
+	  exibirCarros();
+	}
+  
+	function exibirCarros() {
+	  const lista = document.getElementById("listaCarros");
+	  lista.innerHTML = "";
+	  for (let i = 0; i < listaCarros.length; i++) {
+		const carro = listaCarros[i];
+		const itemLista = document.createElement("li");
+		itemLista.textContent = `${carro.marca} ${carro.modelo} (${carro.ano}) - ${carro.cor} - ${carro.anosUtilizacao()} anos de uso - valor de mercado: R$${carro.valorMercado().toFixed(2)}`;
+		lista.appendChild(itemLista);
+	  }
+	}
+  </script>
+  

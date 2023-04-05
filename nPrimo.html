@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verificador de números primos</title>
+</head>
+<body>
+  <h1>Verificador de números primos</h1>
+
+  <p>Digite um número inteiro positivo:</p>
+  <input type="number" id="numInput">
+  <button onclick="verificarPrimo()">Verificar</button>
+
+  <script>
+    function verificarPrimo() {
+      let num = parseInt(document.getElementById("numInput").value);
+
+      if (num > 1) {
+        let isPrime = true;
+        
+        for (let i = 2; i <= Math.sqrt(num); i++) {
+          if (num % i === 0) {
+            isPrime = false;
+            break;
+          }
+        }
+        
+        if (isPrime) {
+          alert(num + " é um número primo.");
+        } else {
+          alert(num + " não é um número primo.");
+        }
+      } else {
+        alert("Por favor, digite um número inteiro positivo maior que 1.");
+      }
+    }
+  </script>
+</body>
+</html>

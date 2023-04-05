@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Verificador de número par ou ímpar</title>
+  </head>
+  <body>
+    <h1>Verificador de número par ou ímpar</h1>
+
+    <p>Digite um número inteiro positivo:</p>
+    <input type="number" id="numInput">
+    <button onclick="verificarParOuImpar()">Verificar</button>
+
+    <script>
+      function verificarParOuImpar() {
+        let num = parseInt(document.getElementById("numInput").value);
+
+        if (num > 0) {
+          if (num % 2 == 0) {
+            alert(num + " é um número par.");
+          } else {
+            alert(num + " é um número ímpar.");
+          }
+        } else {
+          alert("Por favor, digite um número inteiro positivo.");
+        }
+      }
+    </script>
+  </body>
+</html>
