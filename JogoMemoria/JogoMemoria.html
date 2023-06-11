@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Memória</title>
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .memory-game {
+            display: flex;
+            flex-wrap: wrap;
+            width: 600px;
+            height: 400px;
+        }
+
+        .memory-card {
+            width: calc(25% - 10px);
+            height: calc(33.33% - 10px);
+            margin: 5px;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        .card-front,
+        .card-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            color: white;
+        }
+
+        .card-front {
+            background-color: yellow;
+        }
+
+        .card-back {
+            background-color: yellow;
+            transform: rotateY(180deg);
+        }
+
+        .flipped {
+            transform: rotateY(180deg);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #victory-message {
+            color: white;
+            font-size: 30px;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="memory-game">
+        <div class="memory-card" data-fruta="maca">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/maca.png" alt="Maçã" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="maca">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/maca.png" alt="Maçã" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="banana">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/banana.png" alt="Banana" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="banana">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/banana.png" alt="Banana" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="laranja">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/laranja.png" alt="Laranja" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="laranja">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/laranja.png" alt="Laranja" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="uva">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/uva.png" alt="Uva" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="uva">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/uva.png" alt="Uva" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="morango">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/morango.png" alt="Morango" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="morango">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/morango.png" alt="Morango" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="abacaxi">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/abacaxi.png" alt="Abacaxi" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+        <div class="memory-card" data-fruta="abacaxi">
+            <div class="card-inner">
+                <div class="card-front"></div>
+                <div class="card-back">
+                    <img src="frutas/abacaxi.png" alt="Abacaxi" width="100%" height="100%">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="victory-message" class="hidden">
+        Parabéns, você venceu!
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.memory-card');
+        let hasFlippedCard = false;
+        let lockBoard = false;
+        let firstCard, secondCard;
+        let matchedCards = 0;
+
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
+
+            this.querySelector('.card-inner').classList.add('flipped');
+
+            if (!hasFlippedCard) {
+                hasFlippedCard = true;
+                firstCard = this;
+                return;
+            }
+
+            secondCard = this;
+            checkForMatch();
+        }
+
+        function checkForMatch() {
+            let isMatch = firstCard.dataset.fruta === secondCard.dataset.fruta;
+
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            firstCard.removeEventListener('click', flipCard);
+            secondCard.removeEventListener('click', flipCard);
+
+            resetBoard();
+            matchedCards += 2;
+            if (matchedCards === cards.length) {
+                setTimeout(() => {
+                    document.getElementById('victory-message').classList.remove('hidden');
+                }, 500);
+            }
+        }
+
+        function unflipCards() {
+            lockBoard = true;
+
+            setTimeout(() => {
+                firstCard.querySelector('.card-inner').classList.remove('flipped');
+                secondCard.querySelector('.card-inner').classList.remove('flipped');
+
+                resetBoard();
+            }, 1500);
+        }
+
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+        }
+
+        (function shuffle() {
+            cards.forEach(card => {
+                let randomPos = Math.floor(Math.random() * 12);
+                card.style.order = randomPos;
+            });
+        })();
+
+        cards.forEach(card => card.addEventListener('click', flipCard));
+    </script>
+</body>
+
+</html>
