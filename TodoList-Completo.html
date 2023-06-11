@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Usuários</title>
+    <!-- Adicionando Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Adicionando CSS personalizado -->
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1>Usuários</h1>
+                <form>
+                    <div class="form-group">
+                        <label for="name">Nome:</label>
+                        <input type="text" class="form-control" id="name" placeholder="Digite o nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" placeholder="Digite o email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthdate">Data de Nascimento:</label>
+                        <input type="text" class="form-control date-mask" id="birthdate"
+                            placeholder="Digite a data de nascimento" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefone Fixo:</label>
+                        <input type="text" class="form-control phone-mask" id="phone"
+                            placeholder="Digite o telefone fixo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile">Telefone Celular:</label>
+                        <input type="text" class="form-control phone-mask" id="mobile"
+                            placeholder="Digite o telefone celular" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="course">Curso:</label>
+                        <input type="text" class="form-control" id="course" placeholder="Digite o curso" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registration">Matrícula:</label>
+                        <input type="text" class="form-control" id="registration"
+                            placeholder="Digite a matrícula" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Função:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="aluno" value="aluno">
+                            <label class="form-check-label" for="aluno">
+                                Aluno
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="professor" value="professor">
+                            <label class="form-check-label" for="professor">
+                                professor
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" onclick="addUser()">Cadastrar</button>
+                    </div>
+                </form>
+                <hr>
+                <h3>Lista de Usuários:</h3>
+                <ul id="user-list" class="list-group">
+                </ul>
+                <button class="btn btn-outline-secondary mt-3" type="button" onclick="sortList()">Ordenar</button>
+            </div>
+        </div>
+    </div>
+    <!-- Adicionando JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <!-- Adicionando Máscaras de Entrada -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        // Array para armazenar os usuários
+        var userList = [];
+
+        // Máscaras de entrada
+        $('.date-mask').mask('00/00/0000');
+        $('.phone-mask').mask('(00) 0000-0000');
+
+        // Função para adicionar um novo usuário à lista
+        function addUser() {
+            var name = $('#name').val();
+            var email = $('#email').val();
+            var birthdate = $('#birthdate').val();
+            var phone = $('#phone').val();
+            var mobile = $('#mobile').val();
+            var course = $('#course').val();
+            var registration = $('#registration').val();
+            var isAluno = $('#aluno').prop('checked');
+            var isProfessor = $('#professor').prop('checked');
+
+            var newUser = {
+                name: name,
+                email: email,
+                birthdate: birthdate,
+                phone: phone,
+                mobile: mobile,
+                course: course,
+                registration: registration,
+                isAluno: isAluno,
+                isProfessor: isProfessor
+            };
+
+            userList.push(newUser);
+            updateList();
+            clearForm();
+        }
+
+        // Função para excluir um usuário da lista
+        function removeUser(index) {
+            userList.splice(index, 1);
+            updateList();
+        }
+
+        // Função para modificar um usuário da lista
+        function modifyUser(index) {
+            var user = userList[index];
+
+            $('#name').val(user.name);
+            $('#email').val(user.email);
+            $('#birthdate').val(user.birthdate);
+            $('#phone').val(user.phone);
+            $('#mobile').val(user.mobile);
+            $('#course').val(user.course);
+            $('#registration').val(user.registration);
+            $('#aluno').prop('checked', user.isAluno);
+            $('#professor').prop('checked', user.isProfessor);
+
+            // Remover o usuário da lista
+            removeUser(index);
+        }
+
+        // Função para atualizar a lista de usuários
+        function updateList() {
+            var list = $('#user-list');
+            list.empty();
+            for (var i = 0; i < userList.length; i++) {
+                var user = userList[i];
+                var item = $('<li class="list-group-item"></li>');
+                item.text(user.name);
+                var modifyBtn = $('<button type="button" class="btn btn-outline-primary btn-sm float-right">Modificar</button>');
+                modifyBtn.click(function (index) {
+                    return function () {
+                        modifyUser(index);
+                    };
+                }(i));
+                var removeBtn = $('<button type="button" class="btn btn-outline-danger btn-sm float-right">Excluir</button>');
+                removeBtn.click(function (index) {
+                    return function () {
+                        removeUser(index);
+                    };
+                }(i));
+                item.append(modifyBtn);
+                item.append(removeBtn);
+                list.append(item);
+            }
+        }
+
+        // Função para reordenar a lista de usuários
+        function sortList() {
+            userList.sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            });
+            updateList();
+        }
+
+        // Função para limpar o formulário após o cadastro
+        function clearForm() {
+            $('#name').val('');
+            $('#email').val('');
+            $('#birthdate').val('');
+            $('#phone').val('');
+            $('#mobile').val('');
+            $('#course').val('');
+            $('#registration').val('');
+            $('#aluno').prop('checked', false);
+        }
+    </script>
+</body>
+
+</html>
